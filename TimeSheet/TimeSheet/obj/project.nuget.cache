@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DVcpNy5d+AeA9+s8uQLb6w3UMr36Vh2Qdfe53mYACqKHPjdz2h1Kdlopvw/c7/3BdwpKOSXR/RHGuVi84sN8vw==",
+  "dgSpecHash": "yrfwrCBZhB9dknsfno+f4T1P4XOW6NHSJILLot2C4gbmhrWXlvO5kCQdmZAB3YraXlrK0EKAfqjbM8J+3A6dlQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\anapc\\Documents\\GitHub\\TimeSheet\\TimeSheet\\TimeSheet\\TimeSheet.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,7 @@
     "C:\\Users\\anapc\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\anapc\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\anapc\\.nuget\\packages\\mysql.data\\8.0.33\\mysql.data.8.0.33.nupkg.sha512",
+    "C:\\Users\\anapc\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\anapc\\.nuget\\packages\\portable.bouncycastle\\1.9.0\\portable.bouncycastle.1.9.0.nupkg.sha512",
     "C:\\Users\\anapc\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\anapc\\.nuget\\packages\\system.configuration.configurationmanager\\4.4.1\\system.configuration.configurationmanager.4.4.1.nupkg.sha512",
