@@ -80,7 +80,6 @@ namespace TimeSheet
                     command.CommandText = $"SELECT * FROM {ProductionCalendarField.TableName} WHERE date >= @lowerbound AND date <= @upperbound ORDER BY date ASC";
                     command.Parameters.AddWithValue($"@lowerbound", lowerBoundDate);
                     command.Parameters.AddWithValue($"@upperbound", upperBoundDate);
-                    await command.ExecuteNonQueryAsync();
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {

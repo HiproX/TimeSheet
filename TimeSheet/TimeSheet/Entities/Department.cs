@@ -55,7 +55,6 @@ namespace TimeSheet
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = $"SELECT * FROM {DepartmentField.TableName}";
-                    await command.ExecuteNonQueryAsync();
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {

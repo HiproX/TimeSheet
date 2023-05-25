@@ -84,7 +84,6 @@ namespace TimeSheet
                 {
                     command.CommandText = $"SELECT * FROM {EmployeeField.TableName} WHERE `{EmployeeField.DepartmentId}` = @{EmployeeField.DepartmentId}";
                     command.Parameters.AddWithValue($"@{EmployeeField.DepartmentId}", department_id);
-                    await command.ExecuteNonQueryAsync();
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {

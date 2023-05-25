@@ -71,14 +71,12 @@ namespace TimeSheet
             InitializeGridHeaders();
 
             int year = DateTime.Now.Year;
-
             var taskEmployees = DataBase.GetEmployeesByDepartment(department.Id);
             var taskProductionCalendar = DataBase.GetProductionCalendarForMonth(year, this.CurrentMonth);
-            var taskAttendanceRecords = DataBase.GetAttendanceRecords(year, this.CurrentMonth, _employeesSelectedDepartmend);
 
             _employeesSelectedDepartmend = await taskEmployees;
-            _attendanceRecordsStorage = await taskAttendanceRecords;
             _selectedProductionCalendar = await taskProductionCalendar;
+            _attendanceRecordsStorage = await DataBase.GetAttendanceRecords(year, this.CurrentMonth, _employeesSelectedDepartmend);
 
             // Вывод в таблицу ...
             foreach (var employee in _employeesSelectedDepartmend)
@@ -122,9 +120,9 @@ namespace TimeSheet
                 // Итого
                 // собираем уникальные отметки в строку
                 StringBuilder stringBuilder = new StringBuilder();
-                foreach (var item in codeCounter)
+                foreach (var key in codeCounter.Keys.OrderBy(key => key.Code))
                 {
-                    stringBuilder.Append($"{item.Key.Code}({item.Value});");
+                    stringBuilder.Append($"{key.Code}({codeCounter[key]});");
                 }
                 // выводим стркоку с уникальными отметками о посещении
                 var total = new DataGridViewTextBoxCell();
@@ -143,11 +141,12 @@ namespace TimeSheet
             {
                 gridView.Columns.Clear();
             }
-            foreach (var header in new dynamic[] { new { Text="ФИО", Width=170 }, new { Text="Должность", Width=100 }, new { Text="Табельный №", Width=107} })
+            foreach (var header in new dynamic[] { new { Text="ФИО" }, new { Text="Должность" }, new { Text="Табельный №"} })
             {
                 var column = new DataGridViewTextBoxColumn();
                 column.HeaderText = header.Text;
-                column.Width = header.Width;
+                column.AutoSizeMode = column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                //column.Width = header.Width;
                 //column.ReadOnly = true;
                 column.Frozen = true;
                 column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -168,7 +167,8 @@ namespace TimeSheet
             {
                 var column = new DataGridViewTextBoxColumn();
                 column.HeaderText = "Итого";
-                column.Width = 180;
+                //column.Width = 180;
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                 column.ReadOnly = true;
                 column.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 gridView.Columns.Add(column);

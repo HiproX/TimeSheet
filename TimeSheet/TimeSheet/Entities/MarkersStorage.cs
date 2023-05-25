@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TimeSheet.Entities;
 using System.Data;
+using System.Xml.Linq;
 
 namespace TimeSheet.Entities
 {
@@ -43,8 +44,8 @@ namespace TimeSheet.Entities
     {
         public MarkerStorage()
         {
-            markersById = new Dictionary<int, Marker>();
-            markersByCode = new Dictionary<string, Marker>();
+            _markersById = new Dictionary<int, Marker>();
+            _markersByCode = new Dictionary<string, Marker>();
         }
         /// <summary>
         /// Добавить отметку с кодировкой на работе в хранилище
@@ -52,8 +53,8 @@ namespace TimeSheet.Entities
         /// <param name="marker">Отметка с кодировкой на работе</param>
         public void AddMarker(Marker marker)
         {
-            markersById.Add(marker.Id, marker);
-            markersByCode.Add(marker.Code, marker);
+            _markersById.Add(marker.Id, marker);
+            _markersByCode.Add(marker.Code, marker);
         }
         /// <summary>
         /// Получить отметку с кодировкой на работе по идентификатору
@@ -62,9 +63,9 @@ namespace TimeSheet.Entities
         /// <returns></returns>
         public Marker GetMarkerById(int id)
         {
-            if (markersById.ContainsKey(id))
+            if (_markersById.ContainsKey(id))
             {
-                return markersById[id];
+                return _markersById[id];
             }
             return null; // Отметка с указанным id не найдена
         }
@@ -75,9 +76,9 @@ namespace TimeSheet.Entities
         /// <returns></returns>
         public Marker GetMarkerByCode(string code)
         {
-            if (markersByCode.ContainsKey(code))
+            if (_markersByCode.ContainsKey(code))
             {
-                return markersByCode[code];
+                return _markersByCode[code];
             }
             return null; // Отметка с указанным кодом не найдена
         }
@@ -86,11 +87,15 @@ namespace TimeSheet.Entities
         /// </summary>
         public void Clear()
         {
-            markersById.Clear();
-            markersByCode.Clear();
+            _markersById.Clear();
+            _markersByCode.Clear();
         }
-        private Dictionary<int, Marker> markersById;
-        private Dictionary<string, Marker> markersByCode;
+        /// <summary>
+        /// Количество записей в хранилище
+        /// </summary>
+        public int Count => _markersById.Count;
+        private Dictionary<int, Marker> _markersById;
+        private Dictionary<string, Marker> _markersByCode;
     }
 }
 
@@ -112,7 +117,6 @@ namespace TimeSheet
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = $"SELECT * FROM {MarkersField.TableName}";
-                    await command.ExecuteNonQueryAsync();
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {

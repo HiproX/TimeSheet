@@ -53,6 +53,10 @@ namespace TimeSheet.Entities
         {
             _data.Clear();
         }
+        /// <summary>
+        /// Количество записей в хранилище
+        /// </summary>
+        public int Count => _data.Count;
         private Dictionary<KeyValuePair<int, int>, int> _data;
     }
 }
@@ -93,11 +97,10 @@ namespace TimeSheet
                     using (var command = connection.CreateCommand())
                     {
                         command.CommandText = $"SELECT * FROM {AttendanceRecordsField.TableName} WHERE {AttendanceRecordsField.Date} >= @lowerbound AND {AttendanceRecordsField.Date} <= @upperbound " +
-                            $"AND {AttendanceRecordsField.Id} = @{AttendanceRecordsField.Id}";
+                            $"AND {AttendanceRecordsField.EmployeeId} = @{AttendanceRecordsField.EmployeeId}";
                         command.Parameters.AddWithValue($"@lowerbound", lowerBoundDate);
                         command.Parameters.AddWithValue($"@upperbound", upperBoundDate);
-                        command.Parameters.AddWithValue($"@{AttendanceRecordsField.Id}", employee.Id);
-                        await command.ExecuteNonQueryAsync();
+                        command.Parameters.AddWithValue($"@{AttendanceRecordsField.EmployeeId}", employee.Id);
 
                         using (var reader = await command.ExecuteReaderAsync())
                         {
