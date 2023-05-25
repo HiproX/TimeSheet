@@ -1,12 +1,18 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimeSheet.Entities;
+using System.Data;
 
-namespace TimeSheet
+namespace TimeSheet.Entities
 {
+    /// <summary>
+    /// Класс представляющий информацию о департаменте
+    /// </summary>
     public class Department
     {
         public Department()
@@ -20,32 +26,57 @@ namespace TimeSheet
             Name = name;
         }
         public bool IsValid => Id != -1 && !String.IsNullOrEmpty(Name);
+        /// <summary>
+        /// Наименование департамента
+        /// </summary>
         public string Name { get; private set; }
+        /// <summary>
+        /// Идентификатор департамента
+        /// </summary>
         public int Id { get; private set; }
     }
+}
 
+namespace TimeSheet
+{
     public partial class DataBase
     {
-        public static List<Department> GetDepartments()
+        /// <summary>
+        /// Получить департаменты
+        /// </summary>
+        /// <returns>Список сущесующих департаментов</returns>
+        public static async Task<List<Department>> GetDepartments()
         {
             var data = new List<Department>();
 
-            var cmd = _connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM departments";
-            cmd.ExecuteNonQuery();
-
-            using (var reader = cmd.ExecuteReader())
+            using (var connection = Connection())
             {
-                while (reader.Read())
+                await connection.OpenAsync();
+                using (var command = connection.CreateCommand())
                 {
-                    var temp = ReadDepartment(reader);
-                    data.Add(temp);
+                    command.CommandText = $"SELECT * FROM {DepartmentField.TableName}";
+                    await command.ExecuteNonQueryAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var temp = ReadDepartment(reader);
+                            data.Add(temp);
+                        }
+                        reader.Close();
+                    }
                 }
             }
 
             return data;
         }
-        private static Department ReadDepartment(MySqlDataReader reader)
+        /// <summary>
+        /// Считать запись с информацией о департаменте с пришедшего ответа на SQL запроса
+        /// </summary>
+        /// <param name="reader">Ответ пришедший с SQL запроса</param>
+        /// <returns>Объект с информацией о департаменте</returns>
+        private static Department ReadDepartment(DbDataReader reader)
         {
             return new(reader.GetInt32(DepartmentField.Id),
                        reader.GetString(DepartmentField.Name));

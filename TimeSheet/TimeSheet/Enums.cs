@@ -18,9 +18,10 @@ namespace TimeSheet.Enums
         Cook,
         [Description("IT-Директор")]
         ITDirector,
-        [Description("Програмист")]
+        [Description("Программист")]
         Programmer,
     };
+
     /// <summary>
     /// Перечисление типов дней
     /// </summary>
@@ -69,7 +70,7 @@ namespace TimeSheet.Enums
                 }
             }
 
-            throw new ArgumentException($"No enum value with description '{description}' found.");
+            throw new ArgumentException($"Не найдено значения перечисления с описанием '{description}'.");
         }
     }
 }

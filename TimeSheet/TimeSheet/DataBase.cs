@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using TimeSheet.Entities;
 
 namespace TimeSheet
 {
@@ -23,61 +25,25 @@ namespace TimeSheet
         private static string? Username { get; } = "TimeSheet";
         private static string? Password { get; } = "12345";
         private static string DataBaseName { get; } = "TimeSheet";
-        private static MySqlConnection _connection;
         private DataBase()
         {
             
         }
+        /// <summary>
+        /// Получить строку для подключения к БД
+        /// </summary>
+        /// <returns></returns>
         private static string GetConnectionString()
         {
-            return $"SERVER={Host}; DATABASE={DataBaseName}; UID={Username}; Password={Password}";
+            return $"SERVER={Host}; DATABASE={DataBaseName}; UID={Username}; Password={Password};";
         }
         /// <summary>
-        /// Подключиться к БД
+        /// Создать подключение к БД
         /// </summary>
-        public static void Connect()
+        /// <returns>Созданное подключение к БД</returns>
+        public static MySqlConnection Connection()
         {
-            try
-            {
-                if (string.IsNullOrEmpty(Host) || string.IsNullOrEmpty(DataBaseName))
-                {
-                    throw new Exception("No database name or host specified!");
-                }
-                var connectionString = GetConnectionString();
-                _connection = new MySqlConnection(connectionString);
-                _connection.Open();
-                IsConnected = true;
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message, "MySQL connection error", MessageBoxButtons.OK);
-                Environment.Exit(1);
-            }
-        }
-        /// <summary>
-        /// Отключиться от БД
-        /// </summary>
-        public static void Close()
-        {
-            IsConnected = false;
-            _connection.Close();
-        }
-        public static void InsertProductionCalendar()
-        {
-            var jsonString = File.ReadAllText("production_calendar.json");
-            var productionCalendar = JsonConvert.DeserializeObject<List<dynamic>>(jsonString) ?? null;
-            if (productionCalendar != null)
-            {
-                foreach (var day in productionCalendar)
-                {
-                    var command = _connection.CreateCommand();
-                    command.CommandText = $"INSERT INTO production_calendar ({ProductionCalendarField.Date}, {ProductionCalendarField.Type}) VALUES " +
-                        $"(@{ProductionCalendarField.Date}, @{ProductionCalendarField.Type})";
-                    command.Parameters.AddWithValue($"{ProductionCalendarField.Date}", day.Date);
-                    command.Parameters.AddWithValue($"{ProductionCalendarField.Type}", day.DateType);
-                    command.ExecuteNonQuery();
-                }
-            }
+            return new MySqlConnection(GetConnectionString());
         }
     }
 
@@ -106,18 +72,13 @@ namespace TimeSheet
     {
         private EmployeeField() : base() { }
         private EmployeeField(string value) : base(value) { }
-        public static EmployeeField Id { get; } = new ("employee_id");
+        public static EmployeeField TableName { get; } = new("employees");
+        public static EmployeeField Id { get; } = new ("id");
         public static EmployeeField DepartmentId { get; } = new ("department_id");
-        public static EmployeeField Name { get; } = new ("employee_name");
-        public static EmployeeField Position { get; } = new ("employee_position");
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-        public static implicit operator string(EmployeeField field)
-        {
-            return field.Value;
-        }
+        public static EmployeeField Surname { get; } = new ("surname");
+        public static EmployeeField FirstName { get; } = new("first_name");
+        public static EmployeeField FathersName { get; } = new("fathers_name");
+        public static EmployeeField Position { get; } = new ("position");
     }
 
     /// <summary>
@@ -127,16 +88,9 @@ namespace TimeSheet
     {
         private DepartmentField() : base() { }
         private DepartmentField(string value) : base(value) { }
-        public static DepartmentField Id { get; } = new ("department_id");
-        public static DepartmentField Name { get; } = new ("department_name");
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-        public static implicit operator string(DepartmentField field)
-        {
-            return field.Value;
-        }
+        public static DepartmentField TableName { get; } = new("departments");
+        public static DepartmentField Id { get; } = new ("id");
+        public static DepartmentField Name { get; } = new ("name");
     }
 
     /// <summary>
@@ -146,16 +100,36 @@ namespace TimeSheet
     {
         private ProductionCalendarField() : base() { }
         private ProductionCalendarField(string value) : base(value) { }
-        public static ProductionCalendarField Id { get; } = new("date_id");
+        public static ProductionCalendarField TableName { get; } = new("production_calendar");
+        public static ProductionCalendarField Id { get; } = new("id");
         public static ProductionCalendarField Date { get; } = new("date");
-        public static ProductionCalendarField Type { get; } = new("date_type");
-        public override string ToString()
-        {
-            return base.ToString();
-        }
-        public static implicit operator string(ProductionCalendarField field)
-        {
-            return field.Value;
-        }
+        public static ProductionCalendarField Type { get; } = new("type");
+    }
+
+    /// <summary>
+    /// Представляет описанией полей БД по учету посещений. Наследуется от абстрактного класса TemplateField
+    /// </summary>
+    public class AttendanceRecordsField : TemplateField
+    {
+        private AttendanceRecordsField() : base() { }
+        private AttendanceRecordsField(string value) : base(value) { }
+        public static AttendanceRecordsField TableName { get; } = new("attendance_records");
+        public static AttendanceRecordsField Id { get; } = new("id");
+        public static AttendanceRecordsField EmployeeId { get; } = new("employee_id");
+        public static AttendanceRecordsField Date { get; } = new("date");
+        public static AttendanceRecordsField MarkerId { get; } = new("marker_id");
+    }
+
+    /// <summary>
+    /// Представляет описанией полей БД для видов отметок. Наследуется от абстрактного класса TemplateField
+    /// </summary>
+    public class MarkersField : TemplateField
+    {
+        private MarkersField() : base() { }
+        private MarkersField(string value) : base(value) { }
+        public static MarkersField TableName { get; } = new("markers");
+        public static MarkersField Id { get; } = new("id");
+        public static MarkersField Code { get; } = new("code");
+        public static MarkersField Description { get; } = new("description");
     }
 }

@@ -49,11 +49,14 @@
             // 
             // departmentsGroup
             // 
+            this.departmentsGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.departmentsGroup.Controls.Add(this.departmentsList);
-            this.departmentsGroup.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.departmentsGroup.Location = new System.Drawing.Point(0, 0);
+            this.departmentsGroup.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.departmentsGroup.Location = new System.Drawing.Point(5, 3);
             this.departmentsGroup.Name = "departmentsGroup";
-            this.departmentsGroup.Size = new System.Drawing.Size(257, 592);
+            this.departmentsGroup.Size = new System.Drawing.Size(249, 585);
             this.departmentsGroup.TabIndex = 0;
             this.departmentsGroup.TabStop = false;
             this.departmentsGroup.Text = "Департаменты";
@@ -63,15 +66,18 @@
             this.departmentsList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.departmentsList.BackColor = System.Drawing.SystemColors.Control;
+            this.departmentsList.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.departmentsList.FormattingEnabled = true;
             this.departmentsList.ItemHeight = 15;
-            this.departmentsList.Location = new System.Drawing.Point(6, 27);
+            this.departmentsList.Location = new System.Drawing.Point(6, 19);
             this.departmentsList.Name = "departmentsList";
-            this.departmentsList.Size = new System.Drawing.Size(245, 544);
+            this.departmentsList.Size = new System.Drawing.Size(237, 559);
             this.departmentsList.TabIndex = 0;
             // 
             // statusStrip1
             // 
+            this.statusStrip1.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.statusStrip1.Location = new System.Drawing.Point(0, 592);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1287, 22);
@@ -80,12 +86,15 @@
             // 
             // tabControlPanel
             // 
+            this.tabControlPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlPanel.Controls.Add(this.tabPage1);
-            this.tabControlPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControlPanel.Location = new System.Drawing.Point(0, 0);
+            this.tabControlPanel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.tabControlPanel.Location = new System.Drawing.Point(3, 3);
             this.tabControlPanel.Name = "tabControlPanel";
             this.tabControlPanel.SelectedIndex = 0;
-            this.tabControlPanel.Size = new System.Drawing.Size(1026, 592);
+            this.tabControlPanel.Size = new System.Drawing.Size(1017, 585);
             this.tabControlPanel.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.tabControlPanel.TabIndex = 0;
             // 
@@ -95,7 +104,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1018, 564);
+            this.tabPage1.Size = new System.Drawing.Size(1009, 557);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -107,20 +116,21 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1012, 558);
+            this.panel1.Size = new System.Drawing.Size(1003, 551);
             this.panel1.TabIndex = 0;
             // 
             // gridView
             // 
             this.gridView.AllowUserToAddRows = false;
             this.gridView.AllowUserToDeleteRows = false;
+            this.gridView.BackgroundColor = System.Drawing.SystemColors.Control;
             this.gridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridView.Location = new System.Drawing.Point(0, 0);
             this.gridView.Name = "gridView";
             this.gridView.ReadOnly = true;
             this.gridView.RowTemplate.Height = 25;
-            this.gridView.Size = new System.Drawing.Size(1012, 558);
+            this.gridView.Size = new System.Drawing.Size(1003, 551);
             this.gridView.TabIndex = 0;
             // 
             // splitContainer1
@@ -144,6 +154,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(1287, 614);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);

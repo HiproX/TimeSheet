@@ -2,61 +2,115 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimeSheet.Entities;
 using TimeSheet.Enums;
+using System.Data;
 
-namespace TimeSheet
+namespace TimeSheet.Entities
 {
+    /// <summary>
+    /// Класс представляющий информацию о сотруднике
+    /// </summary>
     public class Employee
     {
         public Employee()
         {
             Id = 1;
-            Name = string.Empty;
+            Surname = FirstName = FathersName = string.Empty;
             Position = PositionType.Intern;
         }
-        public Employee(int id, string name, int departmentId, PositionType position)
+        public Employee(int id, string surname, string firstName, string fathersName, int departmentId, PositionType position)
         {
             Id = id;
-            Name = name;
+            Surname = surname;
+            FirstName = firstName;
+            FathersName = fathersName;
             DepartmentId = departmentId;
             Position = position;
         }
-        public bool IsValidId => Id > 0 && !String.IsNullOrEmpty(Name);
+        public bool IsValidId => Id > 0 && !String.IsNullOrEmpty(Surname);
+        /// <summary>
+        /// Идентификатор
+        /// </summary>
         public int Id { get; private set; }
-        public string Name { get; private set; }
+        /// <summary>
+        /// Фамилия
+        /// </summary>
+        public string Surname { get; private set; }
+        /// <summary>
+        /// Имя
+        /// </summary>
+        public string FirstName { get; private set; }
+        /// <summary>
+        /// Отчество
+        /// </summary>
+        public string FathersName { get; private set; }
+        /// <summary>
+        ///  Должность
+        /// </summary>
         public PositionType Position { get; private set; }
+        /// <summary>
+        /// Идентификатор департамента
+        /// </summary>
         public int DepartmentId { get; private set; }
+        /// <summary>
+        /// Полное ФИО
+        /// </summary>
+        public string FullName => $"{Surname} {FirstName} {FathersName}".Trim();
     }
+}
 
+namespace TimeSheet
+{
     public partial class DataBase
     {
-        public static List<Employee> GetEmployeesByDepartment(int department_id)
+        /// <summary>
+        /// Получить работников в депаратаменте
+        /// </summary>
+        /// <param name="department_id">Идентификатор департамента</param>
+        /// <returns>Список работников в департаменте</returns>
+        public static async Task<List<Employee>> GetEmployeesByDepartment(int department_id)
         {
             var data = new List<Employee>();
 
-            var cmd = _connection.CreateCommand();
-            cmd.CommandText = $"SELECT * FROM employees WHERE `{EmployeeField.DepartmentId}` = @{EmployeeField.DepartmentId}";
-            cmd.Parameters.AddWithValue($"@{EmployeeField.DepartmentId}", department_id);
-            cmd.ExecuteNonQuery();
-
-            using (var reader = cmd.ExecuteReader())
+            using (var connection = Connection())
             {
-                while (reader.Read())
+                await connection.OpenAsync();
+                using (var command = connection.CreateCommand())
                 {
-                    var temp = ReadEmployee(reader);
-                    data.Add(temp);
+                    command.CommandText = $"SELECT * FROM {EmployeeField.TableName} WHERE `{EmployeeField.DepartmentId}` = @{EmployeeField.DepartmentId}";
+                    command.Parameters.AddWithValue($"@{EmployeeField.DepartmentId}", department_id);
+                    await command.ExecuteNonQueryAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var temp = ReadEmployee(reader);
+                            data.Add(temp);
+                        }
+                        reader.Close();
+                    }
                 }
             }
 
             return data;
         }
-        private static Employee ReadEmployee(MySqlDataReader reader)
+        /// <summary>
+        /// Считать данные работника с пришедшего ответа на SQL запроса
+        /// </summary>
+        /// <param name="reader">Ответ пришедший с SQL запроса</param>
+        /// <returns>Объект с информацией о работнике</returns>
+        private static Employee ReadEmployee(DbDataReader reader)
         {
-            return new (reader.GetInt32(EmployeeField.Id),
-                        reader.GetString(EmployeeField.Name),
+            return new(reader.GetInt32(EmployeeField.Id),
+                        reader.GetString(EmployeeField.Surname),
+                        reader.GetString(EmployeeField.FirstName),
+                        reader.GetString(EmployeeField.FathersName),
                         reader.GetInt32(EmployeeField.DepartmentId),
                         (PositionType)reader.GetInt32(EmployeeField.Position));
         }
