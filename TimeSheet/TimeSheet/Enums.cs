@@ -31,9 +31,9 @@ namespace TimeSheet.Enums
         WorkingDay,
         [Description("Выходной день")]
         DayOff,
-        [Description("Предвыходной день")]
+        [Description("Предпраздничный день")]
         PreHoliday,
-        [Description("Выходной день")]
+        [Description("Праздничный день")]
         Holiday
     };
 
