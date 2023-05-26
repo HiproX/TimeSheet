@@ -1,15 +1,19 @@
 ﻿using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
+using MySqlX.XDevAPI.Relational;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using TimeSheet.Entities;
+using Tomlyn;
+using Tomlyn.Model;
 
 namespace TimeSheet
 {
@@ -21,14 +25,23 @@ namespace TimeSheet
         private static readonly Lazy<DataBase> _lazyInstance = new Lazy<DataBase>(new DataBase());
         public static DataBase Instance => _lazyInstance.Value;
         public static bool IsConnected { get; private set; } = false;
-        private static string Host { get; } = "localhost";
-        private static string? Username { get; } = "TimeSheet";
-        private static string? Password { get; } = "12345";
-        private static string DataBaseName { get; } = "TimeSheet";
-        private DataBase()
+        private static string Host { get; set; } = @"localhost";
+        private static string? Username { get; set; } = @"root";
+        private static string? Password { get; set; } = string.Empty;
+        private static string DataBaseName { get; set; } = string.Empty;
+        /// <summary>
+        /// Путь к конфигурационному файлу с настройками подключения к БД
+        /// </summary>
+        private static string ConfigFile { get; } = @"timesheet.toml";
+        /// <summary>
+        /// Существут ли конфигурационный файл с настройками подключения к БД
+        /// </summary>
+        private static bool IsConfigExist => File.Exists(ConfigFile);
+        static DataBase()
         {
-            
+            ParseConfigFile();
         }
+        private DataBase() { }
         /// <summary>
         /// Получить строку для подключения к БД
         /// </summary>
@@ -44,6 +57,55 @@ namespace TimeSheet
         public static MySqlConnection Connection()
         {
             return new MySqlConnection(GetConnectionString());
+        }
+        /// <summary>
+        /// Открыть подключение к БД. Если не удастся открыть подключение,
+        /// будет сообщение об ошибке с последующим завершением работы приложения
+        /// </summary>
+        private static async Task OpenAsync(MySqlConnection connection)
+        {
+            try
+            {
+                await connection.OpenAsync();
+            }
+            catch (Exception ex)
+            {
+                var result = MessageBox.Show(ex.Message, "Ошибка подключения к СУБД MySQL", MessageBoxButtons.OK);
+                if (result == DialogResult.OK)
+                {
+                    Environment.Exit(1);
+                }
+            }
+        }
+        /// <summary>
+        /// Прочитать конфигурационный файл с настройками подключения к БД
+        /// </summary>
+        /// <returns>Конфигурационный файл с настройками</returns>
+        private static TomlTable ReadConfig()
+        {
+            return Toml.Parse(File.ReadAllText(ConfigFile)).ToModel();
+        }
+        /// <summary>
+        /// Считать конфигурационный файл с настройками подключения к БД
+        /// </summary>
+        private static void ParseConfigFile()
+        {
+            if (IsConfigExist)
+            {
+                var config = ReadConfig();
+                if (config.ContainsKey("DataBase"))
+                {
+                    var dataBase = config["DataBase"] as TomlTable;
+                    if (dataBase != null)
+                    {
+                        if (dataBase.ContainsKey("Host")) Host = dataBase["Host"].ToString();
+                        if (dataBase.ContainsKey("Username")) Username = dataBase["Username"].ToString();
+                        if (dataBase.ContainsKey("Password")) Password = dataBase["Password"].ToString();
+                        if (dataBase.ContainsKey("DataBaseName")) DataBaseName = dataBase["DataBaseName"].ToString();
+                    }
+                }
+
+            }
         }
     }
 

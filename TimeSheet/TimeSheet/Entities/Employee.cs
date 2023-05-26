@@ -79,7 +79,7 @@ namespace TimeSheet
 
             using (var connection = Connection())
             {
-                await connection.OpenAsync();
+                await OpenAsync(connection);
                 using (var command = connection.CreateCommand())
                 {
                     command.CommandText = $"SELECT * FROM {EmployeeField.TableName} WHERE `{EmployeeField.DepartmentId}` = @{EmployeeField.DepartmentId}";

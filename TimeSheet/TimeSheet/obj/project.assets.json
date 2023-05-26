@@ -525,6 +525,19 @@
             "rid": "win"
           }
         }
+      },
+      "Tomlyn/0.16.2": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Tomlyn.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Tomlyn.dll": {
+            "related": ".xml"
+          }
+        }
       }
     }
   },
@@ -1745,12 +1758,30 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Tomlyn/0.16.2": {
+      "sha512": "NVvOlecYWwhqQdE461UGHUeJ1t2DtGXU+L00LgtBTgWA16bUmMhUIRaCpSkRX5HqAeid/KlXmdH7Sul0mr6HJA==",
+      "type": "package",
+      "path": "tomlyn/0.16.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/Tomlyn.dll",
+        "lib/net6.0/Tomlyn.xml",
+        "lib/netstandard2.0/Tomlyn.dll",
+        "lib/netstandard2.0/Tomlyn.xml",
+        "logo.png",
+        "readme.md",
+        "tomlyn.0.16.2.nupkg.sha512",
+        "tomlyn.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
       "MySql.Data >= 8.0.33",
-      "Newtonsoft.Json >= 13.0.3"
+      "Newtonsoft.Json >= 13.0.3",
+      "Tomlyn >= 0.16.2"
     ]
   },
   "packageFolders": {
@@ -1805,6 +1836,10 @@
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.3, )"
+          },
+          "Tomlyn": {
+            "target": "Package",
+            "version": "[0.16.2, )"
           }
         },
         "imports": [

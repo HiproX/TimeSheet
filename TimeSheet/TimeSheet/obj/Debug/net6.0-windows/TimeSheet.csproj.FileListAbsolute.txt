@@ -32,3 +32,4 @@ C:\Users\anapc\Documents\GitHub\TimeSheet\TimeSheet\TimeSheet\bin\Debug\net6.0-w
 C:\Users\anapc\Documents\GitHub\TimeSheet\TimeSheet\TimeSheet\bin\Debug\net6.0-windows\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
 C:\Users\anapc\Documents\GitHub\TimeSheet\TimeSheet\TimeSheet\obj\Debug\net6.0-windows\TimeSheet.csproj.CopyComplete
 C:\Users\anapc\Documents\GitHub\TimeSheet\TimeSheet\TimeSheet\bin\Debug\net6.0-windows\Newtonsoft.Json.dll
+C:\Users\anapc\Documents\GitHub\TimeSheet\TimeSheet\TimeSheet\bin\Debug\net6.0-windows\Tomlyn.dll

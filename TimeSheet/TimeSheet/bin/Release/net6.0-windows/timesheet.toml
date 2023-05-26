@@ -1,0 +1,7 @@
+# Это комментарий, который будет проигнорирован
+
+[DataBase]
+Host = "localhost" # адрес
+Username = "TimeSheet" # имя пользователя
+Password = "12345" # пароль
+DataBaseName = "timesheet" # название БД

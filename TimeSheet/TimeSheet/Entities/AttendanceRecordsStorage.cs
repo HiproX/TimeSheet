@@ -90,7 +90,7 @@ namespace TimeSheet
 
             using (var connection = Connection())
             {
-                await connection.OpenAsync();
+                await OpenAsync(connection);
 
                 foreach (var employee in employees)
                 {

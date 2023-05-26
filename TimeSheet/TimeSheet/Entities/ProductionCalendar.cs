@@ -62,7 +62,7 @@ namespace TimeSheet
 
             using (var connection = Connection())
             {
-                await connection.OpenAsync();
+                await OpenAsync(connection);
 
                 var formatedString = $"{year:D4}-{month:D2}";
                 var formatForParams = "yyyy-MM";
